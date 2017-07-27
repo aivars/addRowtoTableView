@@ -8,35 +8,33 @@
 
 import UIKit
 
-
-
-
-
 class TableVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
-   
+    
     var myArray: [String] = ["1","2","3"]
     var myLabel = String()
+    let userDefaults = UserDefaults()
+    
     @IBAction func backBtn(_ sender: Any) {
         dismiss(animated: true, completion: nil)
-        }
+        
+    }
     
-        @IBOutlet weak var myTableView: UITableView!
-        
-        
+    @IBOutlet weak var myTableView: UITableView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        //myArray.append(myLabel)
-        insertRow()
+        print("myArray in wiewDidLoad \(myArray)") //defined in var values presented in the Array
         
-      print(myArray)
-                }
-    
-    func insertRow() {
-        myArray.append(myLabel)
-        let index = IndexPath(row: myArray.count - 1, section: 0)
-        myTableView.beginUpdates()
-        myTableView.insertRows(at: [index], with: .automatic)
-        myTableView.endUpdates()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        // read values from memmory
+        if (userDefaults.array(forKey: "SavedArray") != nil) {
+            self.myArray = userDefaults.object(forKey: "SavedArray") as! [String]
+            print("myArray in wiewWillAppear \(myArray)")
+            
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -45,11 +43,11 @@ class TableVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cellTitle = myArray[indexPath.row]
-    
+        
         let cell = myTableView.dequeueReusableCell(withIdentifier: "cell") as! MyCell
         cell.myTitle.text = cellTitle
         
         return cell
-        }
-        
+    }
+    
 }
